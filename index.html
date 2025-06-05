@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>YouTube Video Downloader</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1> YouTube Video Downloader</h1>
+    <form action="/fetch" method="post">
+      <input type="text" name="url" placeholder="Paste YouTube video link here" required>
+      <button type="submit">Get Download Options</button>
+    </form>
+
+    {% if formats %}
+    <div class="download-list">
+      <h2>?? Choose Quality</h2>
+      {% for fmt in formats %}
+        <a href="/download?url={{ video_url }}&itag={{ fmt['itag'] }}" target="_blank">
+          {{ fmt['resolution'] }} | {{ fmt['ext'] }} | {{ fmt['filesize'] }}
+        </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if audio_format %}
+    <div class="download-list">
+      <h2>Download Audio Only</h2>
+      <a href="/download?url={{ video_url }}&itag={{ audio_format['itag'] }}" target="_blank">
+        {{ audio_format['abr'] }} Audio | {{ audio_format['ext'] }} | {{ audio_format['filesize'] }}
+      </a>
+    </div>
+    {% endif %}
+
+    {% if error %}
+      <p style="color:red;">{{ error }}</p>
+    {% endif %}
+  </div>
+</body>
+</html>
